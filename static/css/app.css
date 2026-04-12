@@ -1,0 +1,298 @@
+:root {
+    --navy: #123458;
+    --teal: #2f7f80;
+    --cream: #f7f3e9;
+    --sand: #efe3c8;
+    --ink: #1e2a33;
+    --mist: #dce9ee;
+}
+
+body {
+    background:
+        radial-gradient(circle at top left, rgba(47, 127, 128, 0.18), transparent 32%),
+        linear-gradient(180deg, #fffdfa 0%, var(--cream) 100%);
+    color: var(--ink);
+    min-height: 100vh;
+}
+
+.navbar {
+    background: linear-gradient(135deg, var(--navy), #0c2238);
+}
+
+.app-panel,
+.resource-card,
+.analytics-card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(18, 52, 88, 0.08);
+    border-radius: 1.25rem;
+    box-shadow: 0 16px 40px rgba(18, 52, 88, 0.08);
+    padding: 1.5rem;
+}
+
+.hero-banner {
+    background: linear-gradient(120deg, rgba(18, 52, 88, 0.98), rgba(47, 127, 128, 0.92));
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+.hero-stats {
+    display: grid;
+    gap: 1rem;
+}
+
+.hero-info {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.hero-note {
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.hero-note span {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.hero-note strong {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 1.1rem;
+}
+
+.stat-pill,
+.metric-box {
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.stat-pill strong,
+.metric-box strong {
+    display: block;
+    font-size: 1.5rem;
+}
+
+.eyebrow {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.analytics-card {
+    height: 100%;
+    background:
+        radial-gradient(circle at top right, rgba(47, 127, 128, 0.14), transparent 36%),
+        rgba(255, 255, 255, 0.95);
+}
+
+.analytics-card span {
+    display: block;
+    font-size: 0.9rem;
+    color: rgba(30, 42, 51, 0.72);
+}
+
+.analytics-card strong {
+    display: block;
+    font-size: 2rem;
+    margin: 0.35rem 0;
+    color: var(--navy);
+}
+
+.analytics-card small {
+    color: rgba(30, 42, 51, 0.68);
+}
+
+.dashboard-window-group .btn.active {
+    background: var(--navy);
+    color: #fff;
+}
+
+.resource-card {
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resource-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 44px rgba(18, 52, 88, 0.12);
+}
+
+.feature-card {
+    border: 1px solid rgba(18, 52, 88, 0.08);
+    border-radius: 1rem;
+    padding: 1rem;
+    height: 100%;
+    background: rgba(247, 243, 233, 0.45);
+}
+
+.resource-meta,
+.status-row,
+.queue-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.queue-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(18, 52, 88, 0.08);
+}
+
+.queue-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.progress {
+    height: 0.65rem;
+    border-radius: 999px;
+    background: rgba(18, 52, 88, 0.08);
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--teal), var(--navy));
+}
+
+.chart-shell {
+    position: relative;
+    min-height: 320px;
+}
+
+.chart-shell-compact {
+    min-height: 260px;
+}
+
+.stack-list {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.compact-list {
+    gap: 0.55rem;
+}
+
+.rank-item,
+.timeline-item,
+.activity-item {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(18, 52, 88, 0.08);
+}
+
+.rank-item,
+.timeline-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.rank-item:last-child,
+.timeline-item:last-child,
+.activity-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.mini-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    background: var(--mist);
+    color: var(--navy);
+    font-size: 0.84rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+    margin-bottom: 0.4rem;
+}
+
+a {
+    color: var(--teal);
+}
+
+.booking-helper-card {
+    background: linear-gradient(135deg, rgba(18, 52, 88, 0.06), rgba(47, 127, 128, 0.12));
+    border-radius: 1rem;
+    padding: 1rem 1.1rem;
+}
+
+.booking-helper-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.helper-label {
+    display: block;
+    color: rgba(30, 42, 51, 0.65);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+#availability-suggestions {
+    background: rgba(18, 52, 88, 0.04);
+    border-radius: 0.9rem;
+    padding: 0.9rem 1rem;
+    min-height: 48px;
+}
+
+.suggested-slot-list {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.suggested-slot {
+    width: 100%;
+    text-align: left;
+    border: 1px solid rgba(18, 52, 88, 0.12);
+    background: #fff;
+    border-radius: 0.85rem;
+    padding: 0.75rem 0.9rem;
+    color: var(--ink);
+    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.suggested-slot:hover {
+    border-color: rgba(47, 127, 128, 0.45);
+    box-shadow: 0 10px 24px rgba(18, 52, 88, 0.08);
+    transform: translateY(-1px);
+}
+
+.suggested-slot strong,
+.suggested-slot span {
+    display: block;
+}
+
+.suggested-slot span {
+    font-size: 0.88rem;
+    color: rgba(30, 42, 51, 0.72);
+    margin-top: 0.18rem;
+}
+
+@media (max-width: 991px) {
+    .hero-banner {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-shell {
+        min-height: 260px;
+    }
+
+    .booking-helper-grid {
+        grid-template-columns: 1fr;
+    }
+}

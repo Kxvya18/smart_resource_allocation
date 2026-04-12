@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Form | Smart Resource Allocation{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="app-panel p-4">
+            <h1 class="h3 mb-3">{% if object %}Update Booking{% else %}Create Booking Request{% endif %}</h1>
+            <p class="text-secondary">Use the live availability checker before submitting the form. Past dates are blocked, bookings are limited to 09:00 AM to 09:00 PM, and clashes will show as no availability with alternate slot suggestions.</p>
+            <form method="post" class="row g-3 js-booking-form" data-availability-url="{% url 'availability-check' %}" data-booking-id="{% if object %}{{ object.pk }}{% endif %}">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="{% if field.name == 'purpose' %}col-12{% else %}col-md-6{% endif %}">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="col-12 text-danger small">{{ error }}</div>
+                {% endfor %}
+                <div class="col-12">
+                    <div class="booking-helper-card">
+                        <div class="booking-helper-grid">
+                            <div>
+                                <span class="helper-label">Access Window</span>
+                                <strong>09:00 AM - 09:00 PM</strong>
+                            </div>
+                            <div>
+                                <span class="helper-label">Duration</span>
+                                <strong id="booking-duration">Select a valid time range</strong>
+                            </div>
+                            <div>
+                                <span class="helper-label">Estimated Cost</span>
+                                <strong id="booking-cost">Select a resource and time slot</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-outline-primary" id="check-availability">Check Availability</button>
+                    <span id="availability-result" class="ms-3 small"></span>
+                </div>
+                <div class="col-12">
+                    <div id="availability-suggestions" class="small text-secondary"></div>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                    <a class="btn btn-outline-dark" href="{% url 'booking-list' %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{ resource_cost_map|json_script:"resource-cost-map" }}
+{% endblock %}

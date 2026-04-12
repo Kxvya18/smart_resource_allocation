@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Resources | Smart Resource Allocation{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">Resource Directory</h1>
+        <p class="text-secondary mb-0">Search rooms, labs, and equipment with AJAX-powered filters.</p>
+    </div>
+    {% if is_manager %}
+        <a class="btn btn-primary" href="{% url 'resource-create' %}">Add Resource</a>
+    {% endif %}
+</div>
+
+<div class="app-panel mb-4">
+    <form class="row g-3 js-resource-filter" data-api-url="{% url 'api-resources-list' %}" data-is-manager="{% if is_manager %}true{% else %}false{% endif %}">
+        <div class="col-md-4">
+            <label class="form-label">Search</label>
+            <input type="text" name="search" class="form-control" value="{{ filters.search }}" placeholder="Lab name, building, feature">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Type</label>
+            <select name="resource_type" class="form-select">
+                <option value="">All</option>
+                {% for value, label in type_choices %}
+                    <option value="{{ value }}" {% if filters.resource_type == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+                <option value="">All</option>
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if filters.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Minimum Capacity</label>
+            <input type="number" min="1" name="capacity" class="form-control" value="{{ filters.capacity }}">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-dark w-100">Filter</button>
+        </div>
+    </form>
+    <div class="small text-secondary mt-3">The cards below update asynchronously through the REST API when you change any filter.</div>
+</div>
+
+<div class="row g-4" id="resource-results">
+    {% for resource in resources %}
+        <div class="col-lg-4">
+            <div class="resource-card">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span class="badge text-bg-info text-capitalize">{{ resource.resource_type }}</span>
+                        <h2 class="h5 mt-2 mb-1">{{ resource.name }}</h2>
+                        <p class="small text-secondary mb-0">{{ resource.building }}{% if resource.location_detail %}, {{ resource.location_detail }}{% endif %}</p>
+                    </div>
+                    <span class="badge {% if resource.status == 'active' %}text-bg-success{% elif resource.status == 'maintenance' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">
+                        {{ resource.get_status_display }}
+                    </span>
+                </div>
+                <p>{{ resource.description|default:"No description provided." }}</p>
+                <div class="resource-meta">
+                    <span>Capacity: {{ resource.capacity }}</span>
+                    <span>{{ resource.available_from|time:"H:i" }} - {{ resource.available_until|time:"H:i" }}</span>
+                </div>
+                {% if resource.source_url %}
+                    <p class="small mt-2 mb-2">
+                        <a href="{{ resource.source_url }}" target="_blank" rel="noopener noreferrer">Source: {{ resource.source_name|default:"Official reference" }}</a>
+                    </p>
+                {% endif %}
+                <p class="small text-secondary mt-3 mb-3">{{ resource.features }}</p>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-primary btn-sm" href="{% url 'resource-detail' resource.pk %}">View</a>
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'booking-create' %}?resource={{ resource.pk }}">Book</a>
+                    {% if is_manager %}
+                        <a class="btn btn-outline-dark btn-sm" href="{% url 'resource-update' resource.pk %}">Edit</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="app-panel text-center text-secondary">No resources found.</div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}{{ resource.name }} | Smart Resource Allocation{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="app-panel h-100">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="badge text-bg-info text-capitalize">{{ resource.resource_type }}</span>
+                    <h1 class="h3 mt-2">{{ resource.name }}</h1>
+                    <p class="text-secondary">{{ resource.building }}{% if resource.floor %}, Floor {{ resource.floor }}{% endif %}{% if resource.location_detail %}, {{ resource.location_detail }}{% endif %}</p>
+                </div>
+                <span class="badge {% if resource.status == 'active' %}text-bg-success{% elif resource.status == 'maintenance' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">
+                    {{ resource.get_status_display }}
+                </span>
+            </div>
+            <p class="mt-3">{{ resource.description }}</p>
+            <div class="row g-3 mt-1">
+                <div class="col-md-4"><div class="metric-box"><span>Capacity</span><strong>{{ resource.capacity }}</strong></div></div>
+                <div class="col-md-4"><div class="metric-box"><span>Cost / Hour</span><strong>Rs. {{ resource.hourly_cost }}</strong></div></div>
+                <div class="col-md-4"><div class="metric-box"><span>Schedule</span><strong>{{ resource.available_from|time:"H:i" }} - {{ resource.available_until|time:"H:i" }}</strong></div></div>
+            </div>
+            <div class="mt-4">
+                <h2 class="h5">Features</h2>
+                <p class="mb-0">{{ resource.features }}</p>
+            </div>
+            {% if resource.source_url %}
+                <div class="mt-4">
+                    <h2 class="h5">Public Reference</h2>
+                    <p class="mb-0">
+                        <a href="{{ resource.source_url }}" target="_blank" rel="noopener noreferrer">
+                            {{ resource.source_name|default:"Official source page" }}
+                        </a>
+                    </p>
+                </div>
+            {% endif %}
+            <div class="d-flex gap-2 mt-4">
+                <a class="btn btn-primary" href="{% url 'booking-create' %}?resource={{ resource.pk }}">Book This Resource</a>
+                <a class="btn btn-outline-dark" href="{% url 'resource-list' %}">Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="app-panel h-100">
+            <h2 class="h5 mb-3">Recent Bookings</h2>
+            {% for booking in recent_bookings %}
+                <div class="queue-item">
+                    <div>
+                        <strong>{{ booking.title }}</strong>
+                        <div class="small text-secondary">{{ booking.requested_start|date:"d M, h:i A" }}</div>
+                    </div>
+                    <span class="badge text-bg-light text-capitalize">{{ booking.status }}</span>
+                </div>
+            {% empty %}
+                <p class="text-secondary mb-0">No recent bookings for this resource.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Smart Resource Allocation{% endblock %}
+
+{% block content %}
+<section class="hero-banner mb-4">
+    <div>
+        <span class="eyebrow">Book Rooms, Labs and Equipment</span>
+        <h1 class="display-6 fw-bold mt-2 mb-3">Reserve campus resources without chasing approvals manually.</h1>
+        <p class="lead mb-3">Find a suitable room, lab, or device, check availability, and submit a request in one place.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-light" href="{% url 'booking-create' %}">Book Now</a>
+            <a class="btn btn-outline-light" href="{% url 'resource-list' %}">Browse Resources</a>
+        </div>
+    </div>
+    <div class="hero-info">
+        <div class="hero-note">
+            <span>Live availability</span>
+            <strong>Check slots instantly</strong>
+        </div>
+        <div class="hero-note">
+            <span>Fast booking flow</span>
+            <strong>Search, select, request</strong>
+        </div>
+        <div class="hero-note">
+            <span>Shared resources</span>
+            <strong>Rooms, labs and equipment</strong>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        {% for category in resource_categories %}
+            <div class="col-lg-4">
+                <div class="app-panel h-100">
+                    <h2 class="h5">{{ category.title }}</h2>
+                    <p class="text-secondary">{{ category.description }}</p>
+                    <a class="btn btn-outline-primary btn-sm" href="{{ category.cta }}">Explore {{ category.title }}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="row g-4 mb-4">
+    <div class="col-xl-7">
+        <div class="app-panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Featured Resources</h2>
+                <a href="{% url 'resource-list' %}" class="small text-decoration-none">View all</a>
+            </div>
+            <div class="row g-3">
+                {% for resource in featured_resources %}
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                <div>
+                                    <h3 class="h6 mb-1">{{ resource.name }}</h3>
+                                    <div class="small text-secondary">{{ resource.resource_type }} • {{ resource.building }}</div>
+                                </div>
+                                <span class="badge text-bg-light">{{ resource.hours }} hrs used</span>
+                            </div>
+                            <div class="small text-secondary mt-2">{{ resource.bookings }} bookings in recent activity</div>
+                            {% if resource.source_url %}
+                                <a class="small d-inline-block mt-2" href="{{ resource.source_url }}" target="_blank" rel="noopener noreferrer">Reference source</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-secondary">No featured resources available yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="app-panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">My Upcoming Bookings</h2>
+                <a href="{% url 'booking-list' %}" class="small text-decoration-none">Manage</a>
+            </div>
+            <div class="stack-list">
+                {% for booking in my_upcoming_bookings %}
+                    <div class="timeline-item">
+                        <div>
+                            <strong>{{ booking.title }}</strong>
+                            <div class="small text-secondary">{{ booking.resource_name }}</div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-semibold">{{ booking.start }}</div>
+                            <div class="small text-secondary">{{ booking.status_label }}</div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-secondary mb-0">You do not have any upcoming bookings yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-xl-6">
+        <div class="app-panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Available to Book</h2>
+                <a href="{% url 'resource-list' %}" class="small text-decoration-none">Browse all</a>
+            </div>
+            <div class="stack-list">
+                {% for resource in available_now_resources %}
+                    <div class="timeline-item">
+                        <div>
+                            <strong>{{ resource.name }}</strong>
+                            <div class="small text-secondary">{{ resource.get_resource_type_display }} • {{ resource.building }}</div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-semibold">Capacity {{ resource.capacity }}</div>
+                            <a class="small" href="{% url 'booking-create' %}?resource={{ resource.pk }}">Book this</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="app-panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Pending Requests</h2>
+                <span class="badge text-bg-warning">Live queue</span>
+            </div>
+            <div class="stack-list">
+                {% for booking in pending_bookings %}
+                    <div class="timeline-item">
+                        <div>
+                            <strong>{{ booking.title }}</strong>
+                            <div class="small text-secondary">{{ booking.resource_name }} by {{ booking.user_name }}</div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-semibold">{{ booking.start }}</div>
+                            <div class="small text-secondary">Pending</div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-secondary mb-0">No pending requests right now.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="app-panel">
+    <div class="row g-4 align-items-start">
+        <div class="col-lg-4">
+            <h2 class="h5">How It Works</h2>
+            <div class="stack-list compact-list">
+                <div class="activity-item">
+                    <strong>1. Pick a resource</strong>
+                    <div class="small text-secondary">Choose a room, lab, or equipment item that fits your need.</div>
+                </div>
+                <div class="activity-item">
+                    <strong>2. Select a valid slot</strong>
+                    <div class="small text-secondary">Only future slots between 09:00 AM and 09:00 PM are allowed.</div>
+                </div>
+                <div class="activity-item">
+                    <strong>3. Check availability</strong>
+                    <div class="small text-secondary">If the slot is already booked, the site clearly shows no availability and suggests alternatives.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h2 class="h5">Service Updates</h2>
+            <div class="stack-list compact-list">
+                {% for resource in dashboard_data.maintenance_resources %}
+                    <div class="activity-item">
+                        <strong>{{ resource.name }}</strong>
+                        <div class="small text-secondary">{{ resource.resource_type }} in {{ resource.building }} is temporarily unavailable.</div>
+                    </div>
+                {% empty %}
+                    <div class="activity-item">
+                        <strong>All core services available</strong>
+                        <div class="small text-secondary">No maintenance blocks are active right now.</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h2 class="h5">Recent Activity</h2>
+            <div class="stack-list compact-list">
+                {% for item in dashboard_data.recent_activity|slice:":4" %}
+                    <div class="activity-item">
+                        <strong>{{ item.title }}</strong>
+                        <div class="small text-secondary">{{ item.resource_name }} • {{ item.status_label }} • {{ item.updated_at }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

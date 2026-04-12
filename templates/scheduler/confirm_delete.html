@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Delete | Smart Resource Allocation{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="app-panel p-4">
+            <h1 class="h4 mb-3">Confirm Deletion</h1>
+            <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="javascript:history.back()" class="btn btn-outline-dark">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
