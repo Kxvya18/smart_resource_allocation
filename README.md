@@ -67,7 +67,7 @@ smart_resource_allocation/
 From the project root, use the application startup script:
 
 ```bash
-cd "/Users/boolu/Desktop/simulations/files (1)/smart_resource_allocation"
+cd smart_resource_allocation
 ./scripts/start_app.sh
 ```
 
